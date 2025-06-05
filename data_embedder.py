@@ -37,11 +37,13 @@ def load_and_process_datasets(selected_files=None):
                 try:
                     output = corrector.correct(cmd)
                     # Store the CLS token
-                    embedding = output[0][0]
+                    embedding = output[0][0][0]
                     all_embeddings.append(embedding)
                     all_commands.append(cmd)
                 except Exception as e:
                     print(f"Error processing command '{cmd}': {str(e)}")
+        print(f"Sample embedding: {all_embeddings[-1]}")
+        print(f"All embeddings shape: {np.array(all_embeddings).shape}")
     
     all_embeddings = np.array(all_embeddings)
     all_commands = np.array(all_commands)
@@ -56,5 +58,5 @@ if __name__ == "__main__":
     selected_files = ['linux_commands.csv', 'macos_commands.csv', 'cmd_commands.csv']
     embeddings, commands = load_and_process_datasets(selected_files)
     
-    np.save('command_embeddings.npy', embeddings)
-    np.save('command_names.npy', commands)
+    np.save('cli_commands/command_embeddings.npy', embeddings)
+    np.save('cli_commands/command_names.npy', commands)

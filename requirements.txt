@@ -20,10 +20,13 @@ onnxconverter-common==1.14.0
 onnxruntime==1.22.0
 onnxruntime-tools==1.7.0
 packaging==25.0
+pandas==2.3.0
 protobuf==3.20.2
 psutil==7.0.0
 py-cpuinfo==9.0.0
 py3nvml==0.2.7
+python-dateutil==2.9.0.post0
+pytz==2025.2
 PyYAML==6.0.2
 regex==2024.11.6
 requests==2.32.3
@@ -38,5 +41,6 @@ tqdm==4.67.1
 transformers==4.52.4
 transformers-onnx==0.0.2
 typing_extensions==4.14.0
+tzdata==2025.2
 urllib3==2.4.0
 xmltodict==0.14.2
