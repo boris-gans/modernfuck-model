@@ -47,14 +47,12 @@ class CommandCorrector:
         
         # Run inference
         outputs = self.session.run(None, model_inputs)
+        last_hidden_state = outputs[0]
+        attention_mask = encoded["attention_mask"]
         
-        # For now, just return the raw output for inspection
-        return outputs
+        return last_hidden_state, attention_mask
     
     def _process_output(self, model_output):
-        # This method will need to be implemented based on your model's
-        # output format after fine-tuning
-        # For now, it's a placeholder
         return {
             "corrected_command": "",
             "confidence": 0.0,
