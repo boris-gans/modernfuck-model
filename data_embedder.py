@@ -5,6 +5,30 @@ from transformer_testing import CommandCorrector
 import numpy as np
 from tqdm import tqdm
 
+def mean_pooling(output, attention_mask):
+    """
+    Perform mean pooling on the output embeddings, taking into account the attention mask.
+    This averages all token embeddings except padding tokens.
+    
+    Args:
+        output: tensor of shape [batch_size, sequence_length, hidden_size]
+        attention_mask: tensor of shape [batch_size, sequence_length]
+    """
+
+    # Expand attention mask to match output dimensions
+    mask_expanded = np.expand_dims(attention_mask, axis=-1)
+    masked_output = output * mask_expanded
+    sum_embeddings = np.sum(masked_output, axis=1) #[batch size, hidden_size]
+    
+
+    sum_mask = np.sum(mask_expanded, axis=1)
+    
+    # Avoid division by zero
+    sum_mask = np.clip(sum_mask, a_min=1e-9, a_max=None)
+    mean_embeddings = sum_embeddings / sum_mask
+    
+    return mean_embeddings
+
 def load_and_process_datasets(selected_files=None):
     """
     Load selected datasets from the Linux/MacOS commands dataset and process them through the transformer.
@@ -35,15 +59,21 @@ def load_and_process_datasets(selected_files=None):
             
             for cmd in batch_commands:
                 try:
-                    output = corrector.correct(cmd)
-                    # Store the CLS token
-                    embedding = output[0][0][0]
-                    all_embeddings.append(embedding)
+                    # Get model output and attention mask
+                    embeddings, attention_mask = corrector.correct(cmd)
+
+                    # Apply mean pooling
+                    pooled_embedding = mean_pooling(embeddings, attention_mask)
+                    
+                    all_embeddings.append(pooled_embedding[0])  # Take first (and only) item from batch
                     all_commands.append(cmd)
                 except Exception as e:
                     print(f"Error processing command '{cmd}': {str(e)}")
-        print(f"Sample embedding: {all_embeddings[-1]}")
-        print(f"All embeddings shape: {np.array(all_embeddings).shape}")
+                    print(f"Embeddings shape: {embeddings.shape}")
+                    print(f"Attention mask shape: {attention_mask.shape}")
+        
+        if all_embeddings:
+            print(f"Sample embedding shape: {all_embeddings[-1].shape}")
     
     all_embeddings = np.array(all_embeddings)
     all_commands = np.array(all_commands)
@@ -54,7 +84,6 @@ def load_and_process_datasets(selected_files=None):
     return all_embeddings, all_commands
 
 if __name__ == "__main__":
-
     selected_files = ['linux_commands.csv', 'macos_commands.csv', 'cmd_commands.csv']
     embeddings, commands = load_and_process_datasets(selected_files)
     
