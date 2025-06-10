@@ -1,11 +1,12 @@
 import onnxruntime as ort
-from transformers import AutoTokenizer
+from transformers import AutoTokenizer, RobertaTokenizer
 import numpy as np
 
 class CommandCorrector:
     def __init__(self):
         self.session = ort.InferenceSession("onnx/quantized/model.quant.onnx", providers=["CPUExecutionProvider"])
-        self.tokenizer = AutoTokenizer.from_pretrained("nreimers/MiniLM-L6-H384-uncased")
+        # self.tokenizer = AutoTokenizer.from_pretrained("nreimers/MiniLM-L6-H384-uncased")
+        self.tokenizer = RobertaTokenizer.from_pretrained("Salesforce/codet5-small")
         
         # System prompt to guide the model's behavior
         self.system_prompt = """You are a CLI command correction assistant. 
@@ -34,15 +35,18 @@ class CommandCorrector:
         encoded = self.tokenizer(
             full_prompt,
             return_tensors="np",
-            padding=True,
+            padding="max_length",
             truncation=True,
             max_length=512
         )
+        # manually define decoder inputs; usually start with 0 for T5
+        decoder_input_ids = np.array([[0]])
         
         # Prepare only the required inputs
         model_inputs = {
             "input_ids": encoded["input_ids"],
-            "attention_mask": encoded["attention_mask"]
+            "attention_mask": encoded["attention_mask"],
+            'decoder_input_ids': decoder_input_ids
         }
         
         # Run inference

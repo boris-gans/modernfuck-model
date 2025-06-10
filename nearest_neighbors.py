@@ -103,7 +103,8 @@ if __name__ == "__main__":
         "npm instl",
         "alis",
         "brik",
-        "ciksum"
+        "ciksum",
+        "breew"
     ]
     
     print("\nTesting command similarity search with Annoy:")
