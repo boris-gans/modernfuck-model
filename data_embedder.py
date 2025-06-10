@@ -84,7 +84,9 @@ def load_and_process_datasets(selected_files=None):
     return all_embeddings, all_commands
 
 if __name__ == "__main__":
-    selected_files = ['linux_commands.csv', 'macos_commands.csv', 'cmd_commands.csv']
+    # selected_files = ['linux_commands.csv', 'macos_commands.csv', 'cmd_commands.csv']
+    selected_files = ['macos_commands.csv']
+
     embeddings, commands = load_and_process_datasets(selected_files)
     
     np.save('cli_commands/command_embeddings.npy', embeddings)
