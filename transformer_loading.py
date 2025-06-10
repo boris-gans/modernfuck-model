@@ -6,13 +6,20 @@ from transformers import RobertaTokenizer, T5ForConditionalGeneration
 from onnxruntime.quantization import quantize_dynamic, QuantType
 from pathlib import Path
 
+# MiniLM
 # model_name = "nreimers/MiniLM-L6-H384-uncased"
 # tokenizer = AutoTokenizer.from_pretrained(model_name)
 # model = AutoModel.from_pretrained(model_name)
 
-model_name = "Salesforce/codet5-small"
-tokenizer = RobertaTokenizer.from_pretrained(model_name)
-model = T5ForConditionalGeneration.from_pretrained(model_name)
+# CodeT5
+# model_name = "Salesforce/codet5-small"
+# tokenizer = RobertaTokenizer.from_pretrained(model_name)
+# model = T5ForConditionalGeneration.from_pretrained(model_name)
+
+# UnixCoder
+model_name = "microsoft/unixcoder-base"
+tokenizer = AutoTokenizer.from_pretrained(model_name)
+model = AutoModel.from_pretrained(model_name)
 
 model_path = Path("onnx/")
 model_path.mkdir(exist_ok=True)
