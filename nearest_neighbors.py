@@ -115,7 +115,7 @@ if __name__ == "__main__":
         for result in similar:
             print(f"- {result['command']} (distance: {result['distance']:.4f})")
     
-    print("\nTesting command similarity search with KNN:")
+    print("\n\nTesting command similarity search with KNN:")
     for cmd in test_commands:
         print(f"\nInput command: {cmd}")
         similar = find_similar_commands(cmd, knn_index, embeddings, command_names, use_annoy=False)
