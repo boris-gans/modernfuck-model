@@ -97,7 +97,3 @@ if __name__ == "__main__":
     corrector.test()
     
     print("\n" + "="*50 + "\n")
-    
-    # Uncomment to test with encoder-decoder model
-    # corrector_seq2seq = CommandCorrector(model_name="t5-small", encoder_only=False)
-    # corrector_seq2seq.test()

@@ -37,5 +37,5 @@ if __name__ == "__main__":
     commands = data_embedder.all_commands
 
     print("Done, saving embeddings and commands...")
-    np.save('cli_commands/command_embeddings.npy', embeddings)
-    np.save('cli_commands/command_names.npy', commands)
+    np.save('transformer/cli_commands/command_embeddings.npy', embeddings)
+    np.save('transformer/cli_commands/command_names.npy', commands)
